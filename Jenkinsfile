@@ -4,23 +4,21 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from Git
                 checkout scm
             }
         }
         
         stage('Build') {
             steps {
-                // Build your JavaScript project
                 sh 'npm install'
             }
         }
         
         stage('Deploy') {
             steps {
-                // Apply Kubernetes configuration
-                sh 'kubectl apply -f kubernetes/deployment.yaml'
-                sh 'kubectl apply -f kubernetes/service.yaml'
+                // Use the 'start' command to run the kubectl apply commands in the background
+                bat 'start kubectl apply -f kubernetes/deployment.yaml'
+                bat 'start kubectl apply -f kubernetes/service.yaml'
             }
         }
     }
