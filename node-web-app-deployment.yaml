@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: node-web-app
-          image: joanroucoux/node-web-app
+          image: sindhusambasivam/hello_world  # Correct the image name
           ports:
-            - containerPort: 8080
+            - containerPort: 4500  # Correct the port
