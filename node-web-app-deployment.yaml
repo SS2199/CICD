@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: node-web-app
-          image: sindhusambasivam/hello_world  # Correct the image name
+          image: sindhusambasivam/hello_world:11  # Updated with the correct image name and tag
           ports:
-            - containerPort: 4500  # Correct the port
+            - containerPort: 4500  # Correct port configuration
