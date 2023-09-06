@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node helloworld.js",
-    "test": "jest --config jest.config.js"
+    "test": "jest --require @babel/register"
   },
   "keywords": [],
   "author": "",
