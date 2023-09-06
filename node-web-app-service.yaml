@@ -10,6 +10,6 @@ spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
-      nodePort: 31110
+      port: 4500       # Port exposed externally on the Service
+      targetPort: 4500 # Port your application listens on inside the pods
+      nodePort: 31110  # NodePort (adjust as needed)
