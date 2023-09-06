@@ -2,11 +2,11 @@
   "name": "node_hello_world",
   "version": "1.0.0",
   "description": "",
-  "main": "helloworld.js", // Updated main file
+  "main": "helloworld.js", 
   "type": "module",
   "scripts": {
-    "start": "node helloworld.js", // Updated start script
-    "test": "jest" // Added test script
+    "start": "node helloworld.js",
+    "test": "jest --require @babel/register"
   },
   "keywords": [],
   "author": "",
