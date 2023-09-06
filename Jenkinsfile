@@ -26,7 +26,7 @@ pipeline {
       steps {
         dir('C:\\Users\\sindhu\\CICD') {
           script {
-            bat 'npx jest --passWithNoTests'
+            bat 'npx jest'
           }
         }
       }
