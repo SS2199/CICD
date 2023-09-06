@@ -11,35 +11,48 @@ pipeline {
   }
 
   stages {
-    stage('Install dependencies') {
+    stage('Install Dependencies') {
       steps {
-        sh 'npm install'
+        dir('C:\\Users\\sindhu\\CICD') {
+          script {
+            // Run npm install in the correct directory
+            bat 'npm install'
+          }
+        }
       }
     }
 
     stage('Test') {
       steps {
-        sh 'npm test'
+        dir('C:\\Users\\sindhu\\CICD') {
+          script {
+            bat 'npx jest --passWithNoTests'
+          }
+        }
       }
     }
 
     stage('Build Docker image') {
       steps {
-        script {
-          sh 'docker build -t ${DOCKERHUB_REGISTRY}:${BUILD_NUMBER} .'
+        dir('C:\\Users\\sindhu\\CICD') {
+          script {
+            bat "docker build -t ${DOCKERHUB_REGISTRY}:${BUILD_NUMBER} ."
+          }
         }
       }
     }
 
     stage('Push Docker image') {
       steps {
-        withCredentials([usernamePassword(
-          credentialsId: DOCKERHUB_CREDENTIALS_ID,
-          passwordVariable: 'sindhu21*',
-          usernameVariable: 'sindhusambasivam'
-        )]) {
-          sh 'docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}'
-          sh 'docker push ${DOCKERHUB_REGISTRY}:${BUILD_NUMBER}'
+        withEnv(['DOCKERHUB_USERNAME=sindhusambasivam', 'DOCKERHUB_PASSWORD=sindhu21*']) {
+          withCredentials([usernamePassword(
+            credentialsId: DOCKERHUB_CREDENTIALS_ID,
+            passwordVariable: 'DOCKERHUB_PASSWORD',
+            usernameVariable: 'DOCKERHUB_USERNAME'
+          )]) {
+            bat "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
+            bat "docker push ${DOCKERHUB_REGISTRY}:${BUILD_NUMBER}"
+          }
         }
       }
     }
@@ -47,7 +60,7 @@ pipeline {
 
   post {
     always {
-      sh 'docker logout'
+      bat 'docker logout'
     }
   }
 }
