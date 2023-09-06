@@ -2,11 +2,11 @@
   "name": "node_hello_world",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "helloworld.js", // Updated main file
   "type": "module",
   "scripts": {
-    "start": "node helloworld.js",
-    "test": "jest"
+    "start": "node helloworld.js", // Updated start script
+    "test": "jest" // Added test script
   },
   "keywords": [],
   "author": "",
