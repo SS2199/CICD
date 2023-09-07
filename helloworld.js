@@ -1,6 +1,6 @@
-const port = 4500;
-
+const express = require("express");
 const app = express();
+const port = 4500;
 
 const server = app.listen(port, async () => {
   console.log(`Server running at port: ${port}`);
@@ -11,4 +11,4 @@ app.get("/hello", (req, res) => {
   res.send("Hello world");
 });
 
-module.exports = server; // Export the server for testing
+module.exports = server;
