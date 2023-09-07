@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        /*stage('Test') {
+        stage('Test') {
             steps {
                 dir('C:\\Users\\sindhu\\CICD') {
                     script {
@@ -31,7 +31,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
 
         stage('Build Docker image') {
             steps {
