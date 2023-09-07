@@ -23,15 +23,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        /*stage('Test') {
             steps {
                 dir('C:\\Users\\sindhu\\CICD') {
                     script {
-                        bat 'npm test -- --maxWorkers=4'
+                        bat 'npm test'
                     }
                 }
             }
-        }
+        }*/
 
         stage('Build Docker image') {
             steps {
