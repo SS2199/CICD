@@ -7,7 +7,7 @@ const server = app.listen(port, async () => {
   console.log(`Server running at port: ${port}`);
 });
 
-app.get("/hello", (req, res) => {
+app.get("/", (req, res) => {
   console.log("Hello world");
   res.send("Hello world");
 });
