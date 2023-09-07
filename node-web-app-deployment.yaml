@@ -19,4 +19,4 @@ spec:
           image: sindhusambasivam/hello_world:11  # Updated with the correct image name and tag
           imagePullPolicy: IfNotPresent  # Adjust as needed
           ports:
-            - containerPort: 4500  # Correct port configuration
+            - containerPort: 8000  # Correct port configuration
