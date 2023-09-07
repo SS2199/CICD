@@ -1,4 +1,5 @@
-const express = require("express");
+// Instead of CommonJS 'require', use ES module 'import'
+import express from "express";
 const app = express();
 const port = 8000;
 
@@ -11,4 +12,4 @@ app.get("/hello", (req, res) => {
   res.send("Hello world");
 });
 
-module.exports = server;
+export default server; // Export as an ES module
