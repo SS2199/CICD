@@ -27,7 +27,7 @@ pipeline {
             steps {
                 dir('C:\\Users\\sindhu\\CICD') {
                     script {
-                        bat 'npm test'
+                        bat 'npm test -- --maxWorkers=4'
                     }
                 }
             }
