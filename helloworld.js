@@ -1,9 +1,9 @@
-// Instead of CommonJS 'require', use ES module 'import'
+// Use the 'import' statement for ES modules
 import express from "express";
 const app = express();
 const port = 8000;
 
-const server = app.listen(port, async () => {
+const server = app.listen(port, () => {
   console.log(`Server running at port: ${port}`);
 });
 
