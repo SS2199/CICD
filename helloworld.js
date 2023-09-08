@@ -1,4 +1,3 @@
-// Use the 'import' statement for ES modules
 import express from "express";
 const app = express();
 const port = 8000;
@@ -12,4 +11,4 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-export default server; // Export as an ES module
+export default server; 
