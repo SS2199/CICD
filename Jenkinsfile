@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-         KUBECONFIG = 'C:\\Users\\sindhu\\.kube\\config'
+        KUBECONFIG = 'C:\\Users\\sindhu\\.kube\\config'
         DOCKERHUB_REGISTRY = 'sindhusambasivam/hello_world'
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub'
     }
@@ -34,30 +34,22 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            environment {
-              scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-            }
             steps {
-              script {
-                withSonarQubeEnv('SonarScanner') {
-                  // Download SonarScanner for Windows
-                  bat "curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip"
-                  bat "powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath ."
+                script {
+                    // Download SonarScanner for Windows
+                    bat "curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip"
+                    bat "powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath ."
 
-                  // Set the scanner bin directory in the PATH
-                  def scannerBinDir = "C:/ProgramData/Jenkins/.jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner.bat";
-                  
-                  // Run SonarScanner
-                        def sonarScannerBat = "${scannerBinDir}"
-                        bat sonarScannerBat
+                    // Set the scanner bin directory in the PATH
+                    def scannerBinDir = "C:/ProgramData/Jenkins/.jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner.bat"
 
-                  echo "SonarQube analysis complete"
+                    // Run SonarScanner
+                    bat scannerBinDir
+
+                    echo "SonarQube analysis complete"
                 }
-              }
             }
-          }
         }
-
 
         stage('Build Docker image') {
             steps {
@@ -71,14 +63,16 @@ pipeline {
 
         stage('Push Docker image') {
             steps {
-                withEnv(['DOCKERHUB_USERNAME=sindhusambasivam', 'DOCKERHUB_PASSWORD=sindhu21*']) {
-                    withCredentials([usernamePassword(
-                        credentialsId: DOCKERHUB_CREDENTIALS_ID,
-                        passwordVariable: 'DOCKERHUB_PASSWORD',
-                        usernameVariable: 'DOCKERHUB_USERNAME'
-                    )]) {
-                        bat "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
-                        bat "docker push ${DOCKERHUB_REGISTRY}:${BUILD_NUMBER}"
+                script {
+                    withEnv(['DOCKERHUB_USERNAME=sindhusambasivam', 'DOCKERHUB_PASSWORD=sindhu21*']) {
+                        withCredentials([usernamePassword(
+                            credentialsId: DOCKERHUB_CREDENTIALS_ID,
+                            passwordVariable: 'DOCKERHUB_PASSWORD',
+                            usernameVariable: 'DOCKERHUB_USERNAME'
+                        )]) {
+                            bat "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
+                            bat "docker push ${DOCKERHUB_REGISTRY}:${BUILD_NUMBER}"
+                        }
                     }
                 }
             }
@@ -100,4 +94,4 @@ pipeline {
             bat 'docker logout'
         }
     }
-
+}
