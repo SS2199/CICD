@@ -33,6 +33,32 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            environment {
+              scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            }
+            steps {
+              script {
+                withSonarQubeEnv('SonarScanner') {
+                  // Download SonarScanner for Windows
+                  bat "curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip"
+                  bat "powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath ."
+
+                  // Set the scanner bin directory in the PATH
+                  def scannerBinDir = "C:/ProgramData/Jenkins/.jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner.bat";
+                  
+                  // Run SonarScanner
+                        def sonarScannerBat = "${scannerBinDir}"
+                        bat sonarScannerBat
+
+                  echo "SonarQube analysis complete"
+                }
+              }
+            }
+          }
+        }
+
+
         stage('Build Docker image') {
             steps {
                 dir('C:\\Users\\sindhu\\CICD') {
