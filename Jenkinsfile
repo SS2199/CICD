@@ -41,7 +41,7 @@ pipeline {
                     bat "powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath ."
 
                     // Set the scanner bin directory in the PATH
-                    def scannerBinDir = "C:/ProgramData/Jenkins/.jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner.bat"
+                    def scannerBinDir = "C:\\ProgramData\\Jenkins\\.jenkins\\tools\\hudson.plugins.sonar.SonarRunnerInstallation\\SonarScanner\\bin\\sonar-scanner.bat"
 
                     // Run SonarScanner
                     bat scannerBinDir
