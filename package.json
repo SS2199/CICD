@@ -15,7 +15,7 @@
     "express": "^4.18.2",
     "selenium-webdriver": "^4.12.0",
     "sonarqube-scanner": "^3.0.1",
-    "selenium-webdriver/chrome": "https://github.com/selenium-webdriver/chrome.git"
+    //"selenium-webdriver/chrome": "https://github.com/selenium-webdriver/chrome.git"
   },
   "devDependencies": {
     "@babel/core": "^7.22.15",
