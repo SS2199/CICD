@@ -6,7 +6,7 @@
   "type": "module",  
   "scripts": {
     "start": "node helloworld.js",
-    "test": "jest"
+    "test": "jest --config jest.config.cjs"
   },
   "keywords": [],
   "author": "",
