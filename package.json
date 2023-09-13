@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "helloworld.js",
-  "type": "module",  // Add this line
+  "type": "module",  
   "scripts": {
     "start": "node helloworld.js",
     "test": "jest"
