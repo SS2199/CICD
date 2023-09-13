@@ -26,7 +26,7 @@ jobs:
 
       - name: Start Express.js Server
         run: |
-          node -r esm helloworld.mjs &  # Start the server in the background with the '&' symbol.
+          node -r esm helloworld.js &  # Start the server in the background with the '&' symbol.
         shell: bash
 
       - name: Wait for Server to Start
