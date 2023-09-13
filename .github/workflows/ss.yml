@@ -1,8 +1,50 @@
-name: hello-world
-on: push
+name: Node.js CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Run this workflow when code is pushed to the "main" branch.
+
 jobs:
-  my-job:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # Use the latest version of the Ubuntu runner.
+
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+      - name: Checkout code
+        uses: actions/checkout@v2  # Action to check out your repository's code.
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2  # Action to set up Node.js environment.
+        with:
+          node-version: 14  # Specify the Node.js version to use.
+
+      - name: Install dependencies
+        run: npm install  # Run a command to install project dependencies.
+
+      - name: Build and test
+        run: npm run build && npm test  # Run build and test scripts.
+
+      - name: Start Express.js Server
+        run: |
+          node -r esm app.js  # Use the '-r esm' flag to enable ES module imports for your script.
+        background: true  # Run the server in the background.
+
+      - name: Wait for Server to Start
+        run: sleep 3  # Adjust the sleep duration as needed to allow time for the server to start.
+
+      - name: Test Express.js Server
+        run: |
+          curl -s http://localhost:8000  # Replace with the appropriate URL if your server runs on a different port or host.
+
+      - name: Stop Express.js Server
+        run: |
+          pkill -f "node -r esm app.js"  # Stop the server by finding and killing the process.
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to production
+        # Here, you would typically have a deployment step like deploying to a web server or cloud platform.
+        run: |
+          echo "Deploying to production..."
