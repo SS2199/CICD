@@ -34,7 +34,8 @@ jobs:
 
       - name: Test Express.js Server
         run: |
-          curl -s http://localhost:8000  # Replace with the appropriate URL if your server runs on a different port or host.
+         sleep 10  # Adjust the sleep duration as needed to allow more time for the server to start.
+         curl -s http://localhost:8000  # Replace with the appropriate URL if your server runs on a different port or host.
 
         
       - name: Stop Express.js Server
