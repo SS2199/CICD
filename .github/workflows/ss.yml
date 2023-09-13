@@ -34,10 +34,22 @@ jobs:
 
       - name: Test Express.js Server
         run: |
-         sleep 10  # Adjust the sleep duration as needed to allow more time for the server to start.
-         curl -s http://localhost:8000  # Replace with the appropriate URL if your server runs on a different port or host.
+         retries=5
+         wait_time=5
+    
+         for ((i=1; i<=$retries; i++)); do
+         if curl -s http://host.docker.internal:8000; then
+          echo "Server is running."
+         exit 0
+         else
+         echo "Server is not yet available. Retrying in $wait_time seconds..."
+         sleep $wait_time
+         fi
+         done
+    
+         echo "Server did not become available after $retries retries."
+         exit 1
 
-        
       - name: Stop Express.js Server
         run: |
           pkill -f "node -r esm app.js"  # Stop the server by finding and killing the process.
