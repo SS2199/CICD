@@ -26,8 +26,8 @@ jobs:
 
       - name: Start Express.js Server
         run: |
-          node -r esm app.js  # Use the '-r esm' flag to enable ES module imports for your script.
-        background: true  # Run the server in the background.
+          node -r esm app.js &  # Start the server in the background with the '&' symbol.
+        shell: bash
 
       - name: Wait for Server to Start
         run: sleep 3  # Adjust the sleep duration as needed to allow time for the server to start.
