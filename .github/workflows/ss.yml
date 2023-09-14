@@ -1,64 +1,49 @@
-name: Node.js CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main  # Run this workflow when code is pushed to the "main" branch.
+      - main  # Adjust the branch as needed
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest version of the Ubuntu runner.
+    runs-on: windows-latest  # Use the appropriate runner
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # Action to check out your repository's code.
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2  # Action to set up Node.js environment.
+        uses: actions/setup-node@v2
         with:
-          node-version: 14  # Specify the Node.js version to use.
+          node-version: '14'  # Use the appropriate Node.js version
 
-      - name: Install dependencies
-        run: npm install  # Run a command to install project dependencies.
-
-      - name: Build and test
-        run: npm run build && npm test  # Run build and test scripts.
-
-      - name: Start Express.js Server
+      - name: Install Dependencies
         run: |
-          node -r esm helloworld.js &  # Start the server in the background with the '&' symbol.
-        shell: bash
+          cd D:\New folder\CICD-main
+          npm install
 
-      - name: Wait for Server to Start
-        run: sleep 30  # Adjust the sleep duration as needed to allow time for the server to start.
-
-      - name: Test Express.js Server
+      - name: Test
         run: |
-         retries=5
-         wait_time=5
-    
-         for ((i=1; i<=$retries; i++)); do
-         if curl -s http://host.docker.internal:8000; then
-          echo "Server is running."
-         exit 0
-         else
-         echo "Server is not yet available. Retrying in $wait_time seconds..."
-         sleep $wait_time
-         fi
-         done
-    
-         echo "Server did not become available after $retries retries."
-         exit 1
+          cd D:\New folder\CICD-main
+          npm test
 
-      - name: Stop Express.js Server
+      - name: Build Docker image
         run: |
-          pkill -f "node -r esm app.js"  # Stop the server by finding and killing the process.
+          cd D:\New folder\CICD-main
+          docker build -t ${{ secrets.DOCKERHUB_REGISTRY }}:${{ github.run_number }} .
 
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to production
-        # Here, you would typically have a deployment step like deploying to a web server or cloud platform.
+      - name: Push Docker image
         run: |
-          echo "Deploying to production..."
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push ${{ secrets.DOCKERHUB_REGISTRY }}:${{ github.run_number }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          # Apply your Kubernetes Deployment and Service YAML files
+          kubectl apply -f node-web-app-deployment.yaml
+          kubectl apply -f node-web-app-service.yaml
+
+      - name: Clean up
+        run: |
+          docker logout
