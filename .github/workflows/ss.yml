@@ -44,8 +44,8 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-             kubectl apply -f node-web-app-deployment.yaml --kubeconfig=config
-             kubectl apply -f node-web-app-service.yaml --kubeconfig=config
+             kubectl apply -f node-web-app-deployment.yaml 
+             kubectl apply -f node-web-app-service.yaml 
 
 
       - name: Clean up
