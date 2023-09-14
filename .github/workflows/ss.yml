@@ -49,9 +49,9 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          # Use kubectl with the proxy URL
-          kubectl apply -f node-web-app-deployment.yaml --server=http://localhost:$KUBE_PROXY_PORT
-          kubectl apply -f node-web-app-service.yaml --server=http://localhost:$KUBE_PROXY_PORT
+             # Use kubectl with the proxy URL
+             kubectl apply -f node-web-app-deployment.yaml --server=http://localhost:$KUBE_PROXY_PORT --disable-filter=true
+             kubectl apply -f node-web-app-service.yaml --server=http://localhost:$KUBE_PROXY_PORT --disable-filter=true
 
       - name: Clean up
         run: |
