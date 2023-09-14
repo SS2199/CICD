@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
+      KUBE_PROXY_PORT: 8001  # Change the port number to your desired value
 
     steps:
       - name: Checkout code
@@ -42,10 +43,15 @@ jobs:
           mkdir -p ~/.kube
           echo "$KUBE_CONFIG_DATA" > ~/.kube/config
 
+      - name: Start Kubernetes Proxy
+        run: |
+          kubectl proxy --port=$KUBE_PROXY_PORT &
+
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f node-web-app-deployment.yaml
-          kubectl apply -f node-web-app-service.yaml
+          # Use kubectl with the proxy URL
+          kubectl apply -f node-web-app-deployment.yaml --server=http://localhost:$KUBE_PROXY_PORT
+          kubectl apply -f node-web-app-service.yaml --server=http://localhost:$KUBE_PROXY_PORT
 
       - name: Clean up
         run: |
