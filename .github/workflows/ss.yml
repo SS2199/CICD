@@ -20,18 +20,14 @@ jobs:
 
       - name: Install Dependencies
         run: |
-         cd "D:\New folder\CICD-main"
-
           npm install
 
       - name: Test
         run: |
-         cd "D:\New folder\CICD-main"
          npm test
 
       - name: Build Docker image
         run: |
-         cd "D:\New folder\CICD-main"
          docker build -t ${{ secrets.DOCKERHUB_REGISTRY }}:${{ github.run_number }} .
 
       - name: Push Docker image
