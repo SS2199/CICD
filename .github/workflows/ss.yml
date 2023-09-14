@@ -40,7 +40,8 @@ jobs:
 
       - name: Set up Kubernetes
         run: |
-         echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+           mkdir -p ~/.kube  # Create the .kube directory if it doesn't exist
+           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
 
       - name: Deploy to Kubernetes
         run: |
