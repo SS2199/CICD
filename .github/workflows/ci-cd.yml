@@ -31,10 +31,15 @@ jobs:
       - name: Test using Jest
         run: npm test
 
-      - name: Execute JMeter
-        run: |
-          C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.bat -n -t "Test Plans\\PetStore-End-to-End-Flow.jmx" -p "Test Plans\\data\\PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
-        shell: cmd
+      - name: Run JMeter Test
+  run: |
+    if [ "${{ runner.os }}" == "Windows" ]; then
+      C:\Users\sindhu\apache-jmeter-5.6.2\bin\jmeter.bat -n -t "Test Plans\\PetStore-End-to-End-Flow.jmx" -p "Test Plans\\data\\PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
+    else
+      C:\Users\sindhu\apache-jmeter-5.6.2\bin\jmeter.sh -n -t "Test Plans/PetStore-End-to-End-Flow.jmx" -p "Test Plans/data/PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
+    fi
+  shell: ${{ runner.os }}
+
 
       - name: Build Docker Image
         run: |
