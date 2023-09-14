@@ -25,21 +25,20 @@ jobs:
         run: |
           curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
           powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath .
-           echo "C:\Users\sindhu\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat"  
+          echo "C:\\Users\\sindhu\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"  
         shell: cmd
 
       - name: Test using Jest
         run: npm test
 
       - name: Run JMeter Test
-  run: |
-    if [ "${{ runner.os }}" == "Windows" ]; then
-      C:\Users\sindhu\apache-jmeter-5.6.2\bin\jmeter.bat -n -t "Test Plans\\PetStore-End-to-End-Flow.jmx" -p "Test Plans\\data\\PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
-    else
-      C:\Users\sindhu\apache-jmeter-5.6.2\bin\jmeter.sh -n -t "Test Plans/PetStore-End-to-End-Flow.jmx" -p "Test Plans/data/PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
-    fi
-  shell: ${{ runner.os }}
-
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.bat -n -t "Test Plans\\PetStore-End-to-End-Flow.jmx" -p "Test Plans\\data\\PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
+          else
+            C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.sh -n -t "Test Plans/PetStore-End-to-End-Flow.jmx" -p "Test Plans/data/PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
+          fi
+        shell: cmd
 
       - name: Build Docker Image
         run: |
