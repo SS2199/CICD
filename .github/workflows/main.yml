@@ -33,9 +33,12 @@ jobs:
                 ls -l
                 # Replace 'sonar-scanner-5.0.1.3006-windows' with the correct directory name
                 mv sonar-scanner-5.0.1.3006-windows sonar-scanner
+                # Debugging: Display the current PATH
+                echo "Current PATH: $PATH"
                 export PATH=$PATH:$(pwd)/sonar-scanner/bin
+                # Debugging: Display the updated PATH
+                echo "Updated PATH: $PATH"
                 sonar-scanner -v
-                
   
       - name: Test using Jest
         run: npm test
