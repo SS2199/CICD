@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      KUBECONFIG: C:\Users\sindhu\.kube
       DOCKERHUB_REGISTRY: sindhusambasivam/hello_world
 
     steps:
