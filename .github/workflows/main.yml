@@ -31,8 +31,9 @@ jobs:
           unzip sonar-scanner.zip
           mv sonar-scanner-5.0.1.3006-windows sonar-scanner
           echo "export PATH=\$PATH:$(pwd)/sonar-scanner/bin" >> $GITHUB_ENV
+          ls -l sonar-scanner/bin  # Add this line to check the contents of the bin directory
           sonar-scanner -v
-        shell: bash
+         shell: bash
 
       - name: Test using Jest
         run: npm test
