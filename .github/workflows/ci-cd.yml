@@ -33,8 +33,9 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t $DOCKERHUB_REGISTRY:${GITHUB_RUN_NUMBER} .
-        shell: cmd
+          DOCKER_IMAGE_TAG="${env:DOCKERHUB_REGISTRY}:${GITHUB_RUN_NUMBER}"  # Create a lowercase image tag
+          DOCKER_IMAGE_TAG=$(echo "$DOCKER_IMAGE_TAG" | tr '[:upper:]' '[:lower:]')  # Convert to lowercase
+          docker build -t $DOCKER_IMAGE_TAG .
 
       - name: Push Docker image
         run: |
