@@ -27,14 +27,14 @@ jobs:
 
       - name: Set up SonarQube Scanner
         run: |
-           curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-           unzip sonar-scanner.zip
-           # List the contents of the extracted directory
-           ls -l
-           # Assuming that the extracted directory is named 'sonar-scanner-*', adjust this line accordingly
-           mv sonar-scanner-* sonar-scanner
-           export PATH=$PATH:$(pwd)/sonar-scanner/bin
-           sonar-scanner -v
+         curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+         unzip sonar-scanner.zip
+         # List the contents of the extracted directory to identify the correct name
+         ls -l
+         # Assuming that the extracted directory has a different name, adjust this line accordingly
+         mv sonar-scanner-5.0.1.3006-windows sonar-scanner
+         export PATH=$PATH:$(pwd)/sonar-scanner/bin
+         sonar-scanner -v
            shell: bash
 
   
