@@ -25,23 +25,13 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Check Permissions of sonar-scanner
-        run: ls -l sonar-scanner/bin/sonar-scanner
-
 
       - name: Set up SonarQube Scanner
         run: |
               curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
                 unzip sonar-scanner.zip
-                # Confirm the name of the extracted directory
-                ls -l
-                # Replace 'sonar-scanner-5.0.1.3006-windows' with the correct directory name
                 mv sonar-scanner-5.0.1.3006-windows sonar-scanner
-                # Debugging: Display the current PATH
-                echo "Current PATH: $PATH"
-                export PATH=$PATH:$(pwd)/sonar-scanner/bin
-                # Debugging: Display the updated PATH
-                echo "Updated PATH: $PATH"
+                echo "export PATH=\$PATH:$(pwd)/sonar-scanner/bin" >> $GITHUB_ENV
                 sonar-scanner -v
   
       - name: Test using Jest
