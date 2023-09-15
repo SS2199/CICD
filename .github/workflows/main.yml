@@ -22,11 +22,13 @@ jobs:
 
       - name: SonarQube Analysis
         run: |
-          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-          unzip sonar-scanner.zip
-          chmod +x sonar-scanner/bin/sonar-scanner
-          sonar-scanner/bin/sonar-scanner
-        shell: bash
+         curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+         unzip sonar-scanner.zip
+         mv sonar-scanner-5.0.1.3006-windows sonar-scanner
+         echo "export PATH=\$PATH:$(pwd)/sonar-scanner/bin" >> $GITHUB_ENV
+         sonar-scanner -v
+         shell: bash
+
 
       - name: Test using Jest
         run: npm test
