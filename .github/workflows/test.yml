@@ -10,28 +10,55 @@ jobs:
     runs-on: windows-latest
 
     env:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      KUBECONFIG: ${{ github.workspace }}\\.kube\\config
       DOCKERHUB_REGISTRY: sindhusambasivam/hello_world
-      DOCKERHUB_CREDENTIALS_ID: dockerhub
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # ... other steps ...
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Normalize DOCKERHUB_REGISTRY
+      - name: SonarQube Analysis
         run: |
-          # Convert DOCKERHUB_REGISTRY to lowercase
-          DOCKERHUB_REGISTRY_LOWER=$(echo $DOCKERHUB_REGISTRY | tr '[:upper:]' '[:lower:]')
-          echo "Normalized DOCKERHUB_REGISTRY: $DOCKERHUB_REGISTRY_LOWER"
-          echo "::set-env name=DOCKERHUB_REGISTRY_LOWER::$DOCKERHUB_REGISTRY_LOWER"
-        shell: bash
+          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+          Expand-Archive -Path sonar-scanner.zip -DestinationPath .
+          $scannerBinDir = "${env:USERPROFILE}\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
+          & $scannerBinDir
+          echo 'SonarQube analysis complete'
+
+      - name: Test using Jest
+        run: npm test
+
+      - name: Execute JMeter
+        run: |
+          C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.bat -n -t "Test Plans\\PetStore-End-to-End-Flow.jmx" -p "Test Plans\\data\\PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
+
+      - name: Publish Report
+        run: perfReport filterRegex: '', sourceDataFiles: '**/*.jtl'
 
       - name: Build Docker Image
         run: |
-          docker build -t $DOCKERHUB_REGISTRY_LOWER:${GITHUB_RUN_NUMBER} .
-        shell: cmd
+          $dockerImage = "${env:DOCKERHUB_REGISTRY}:${{ github.run_number }}"
+          docker build -t $dockerImage .
 
-      # ... other steps ...
+      - name: Push Docker Image
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push "${env:DOCKERHUB_REGISTRY}:${{ github.run_number }}"
 
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f node-web-app-deployment.yaml
+          kubectl apply -f node-web-app-service.yaml
+
+      - name: Run Selenium Test
+        run: |
+          Start-Process -NoNewWindow -FilePath "node" -ArgumentList "helloworld.js"
+          Start-Sleep -Seconds 10
+          # Install Selenium dependencies and run Selenium tests
+          # Replace with the actual commands
+
+      - name: Cleanup
+        run: docker logout
