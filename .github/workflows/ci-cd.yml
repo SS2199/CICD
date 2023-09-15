@@ -7,66 +7,59 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       KUBECONFIG: ${{ secrets.KUBECONFIG }}
       DOCKERHUB_REGISTRY: sindhusambasivam/hello_world
-      DOCKERHUB_CREDENTIALS_ID: dockerhub
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Use the desired Node.js version
+
       - name: Install Dependencies
         run: npm install
 
-      - name: SonarQube Analysis
-        run: |
-          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-          powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath .
-          echo "C:\\Users\\sindhu\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"  
-        shell: cmd
 
+      - name: Set up SonarQube Scanner
+        run: |
+         curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+         echo "C:\\Users\\vipv\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
+
+         
       - name: Test using Jest
         run: npm test
 
       - name: Build Docker image
         run: |
-          docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
-      - name: Push Docker image
-        run: |
-          docker login -u sindhusambasivam -p sindhu21*
-          docker push sindhusambasivam/hello_world:${{ github.run_number }}
-
+            docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
 
       - name: Push Docker image
         run: |
-          echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker push $DOCKERHUB_REGISTRY:${GITHUB_RUN_NUMBER}
-        shell: cmd
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker login -u sindhusambasivam -p sindhu21*
+            docker push sindhusambasivam/hello_world:${{ github.run_number }}
 
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f node-web-app-deployment.yaml
           kubectl apply -f node-web-app-service.yaml
-        shell: cmd
 
       - name: Run Selenium Test
         run: |
-          start /b cmd /c node helloworld.js
+          node helloworld.js &
           # Wait for server to start
-          timeout /t 60
+          sleep 60
           # Install Selenium dependencies
           npm install selenium-webdriver chromedriver
           # Run Selenium test
           node selenium-test.js
           # Kill the Express.js server process
-          taskkill /f /im "node.exe"
-        shell: cmd
+          pkill -f "node helloworld.js"
 
       - name: Logout from Docker
         run: docker logout
