@@ -33,8 +33,8 @@ jobs:
           echo "export PATH=\$PATH:$(pwd)/sonar-scanner/bin" >> $GITHUB_ENV
           ls -l sonar-scanner/bin  # Add this line to check the contents of the bin directory
           sonar-scanner -v
-         shell: bash
-
+          shell: bash
+  
       - name: Test using Jest
         run: npm test
 
