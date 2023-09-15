@@ -37,10 +37,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $DOCKERHUB_REGISTRY:${{ github.run_number }} .
-        env:
-          DOCKERHUB_REGISTRY: ${{ secrets.DOCKERHUB_REGISTRY }}
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+            docker build -t sivashreek/kubn:${{ github.run_number }} .
 
       - name: Push Docker image
         run: |
