@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-            docker build -t sivashreek/kubn:${{ github.run_number }} .
+            docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
 
       - name: Push Docker image
         run: |
