@@ -23,10 +23,9 @@ jobs:
       - name: SonarQube Analysis
         run: |
           curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-          Expand-Archive -Path sonar-scanner.zip -DestinationPath .
-          $scannerBinDir = "${env:USERPROFILE}\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
-          & $scannerBinDir
-          echo 'SonarQube analysis complete'
+          powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath .
+          echo "C:\\Users\\sindhu\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"  
+        shell: cmd
 
       - name: Test using Jest
         run: npm test
