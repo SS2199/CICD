@@ -35,8 +35,7 @@ jobs:
                 mv sonar-scanner-5.0.1.3006-windows sonar-scanner
                 export PATH=$PATH:$(pwd)/sonar-scanner/bin
                 sonar-scanner -v
-                 shell: bash
-
+                
   
       - name: Test using Jest
         run: npm test
