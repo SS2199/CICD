@@ -32,7 +32,7 @@ jobs:
 
       - name: Execute JMeter
         run: |
-          C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.bat -n -t "Test Plans\\PetStore-End-to-End-Flow.jmx" -p "Test Plans\\data\\PetStore_LoadTest.properties" -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl
+          cmd /c "C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.bat -n -t 'Test Plans\\PetStore-End-to-End-Flow.jmx' -p 'Test Plans\\data\\PetStore_LoadTest.properties' -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl"
 
       
       - name: Build Docker Image
