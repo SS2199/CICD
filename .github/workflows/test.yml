@@ -25,12 +25,12 @@ jobs:
           # Convert DOCKERHUB_REGISTRY to lowercase
           DOCKERHUB_REGISTRY_LOWER=$(echo $DOCKERHUB_REGISTRY | tr '[:upper:]' '[:lower:]')
           echo "Normalized DOCKERHUB_REGISTRY: $DOCKERHUB_REGISTRY_LOWER"
-          echo "::set-env name=DOCKERHUB_REGISTRY::$DOCKERHUB_REGISTRY_LOWER"
+          echo "DOCKERHUB_REGISTRY=$DOCKERHUB_REGISTRY_LOWER" >> $GITHUB_ENV
         shell: bash
 
       - name: Build Docker Image
         run: |
-          docker build -t $DOCKERHUB_REGISTRY:${GITHUB_RUN_NUMBER} .
+          docker build -t $DOCKERHUB_REGISTRY_LOWER:${GITHUB_RUN_NUMBER} .
         shell: cmd
 
       # ... other steps ...
