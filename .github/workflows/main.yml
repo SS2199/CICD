@@ -25,6 +25,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Check Permissions of sonar-scanner
+        run: ls -l sonar-scanner/bin/sonar-scanner
+
+
       - name: Set up SonarQube Scanner
         run: |
               curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
