@@ -49,10 +49,10 @@ jobs:
             docker login -u sindhusambasivam -p sindhu21*
             docker push sindhusambasivam/hello_world:${{ github.run_number }}
 
-      #- name: Deploy to Kubernetes
-       # run: |
-        #  kubectl apply -f node-web-app-deployment.yaml
-         # kubectl apply -f node-web-app-service.yaml
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f node-web-app-deployment.yaml
+          kubectl apply -f node-web-app-service.yaml
 
       - name: Run Selenium Test
         run: |
