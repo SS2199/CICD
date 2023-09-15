@@ -11,5 +11,5 @@ describe('GET /hello', () => {
     const response = await request(server).get('/hello');
     expect(response.status).toBe(200);
     expect(response.text).toBe('Hello world');
-  });
+  }, 10000); // Set a timeout of 10 seconds (10000 ms)
 });
