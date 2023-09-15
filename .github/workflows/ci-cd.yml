@@ -31,12 +31,13 @@ jobs:
       - name: Test using Jest
         run: npm test
 
-      - name: Build Docker Image
+      - name: Build Docker image
         run: |
-          DOCKER_IMAGE_TAG="${{ env.DOCKERHUB_REGISTRY }}:${{ github.run_number }}"  # Create a lowercase image tag
-          DOCKER_IMAGE_TAG=$(echo "$DOCKER_IMAGE_TAG" | tr '[:upper:]' '[:lower:]')  # Convert to lowercase
-          docker build -t $DOCKER_IMAGE_TAG .
-        working-directory: C:\Users\sindhu\CICD
+          docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
+      - name: Push Docker image
+        run: |
+          docker login -u sindhusambasivam -p sindhu21*
+          docker push sindhusambasivam/hello_world:${{ github.run_number }}
 
 
       - name: Push Docker image
