@@ -1,5 +1,5 @@
 # Define from what image we want to build from
-FROM node:latest
+FROM node:14
 
 # Create app directory
 WORKDIR /usr/src/app 
