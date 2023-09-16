@@ -7,15 +7,20 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
-      KUBECONFIG: ${{ github.workspace }}\\.kube\\config
-      DOCKERHUB_REGISTRY: sindhusambasivam/hello_world
+      KUBECONFIG_PASS: ${{ secrets.KUBECONFIG_PWD }}
+      DOCKERHUB_REGISTRY: vipv/kuber
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Use the desired Node.js version
 
       - name: Install Dependencies
         run: npm install
@@ -23,39 +28,57 @@ jobs:
       - name: SonarQube Analysis
         run: |
           curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-          powershell -Command Expand-Archive -Path sonar-scanner.zip -DestinationPath .
-          echo "C:\\Users\\sindhu\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"  
-        shell: cmd
+          echo "C:\\Users\\vipv\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
 
       - name: Test using Jest
         run: npm test
 
-      #- name: Execute JMeter
-       # run: |
-        #  cmd /c "C:\\Users\\sindhu\\apache-jmeter-5.6.2\\bin\\jmeter.bat -n -t 'Test Plans\\PetStore-End-to-End-Flow.jmx' -p 'Test Plans\\data\\PetStore_LoadTest.properties' -JTOTAL_THREADS=2 -JTEST_DURATION=60 -l MyRun1.jtl"
+      - name: Run JMeter Tests
+        uses: QAInsights/PerfAction@v3.1
+        with:
+          test-plan-path: ./CSVSample.jmx
 
-      
-      - name: Build Docker Image
+      - name: Build Docker image
         run: |
-          $dockerImage = "${env:DOCKERHUB_REGISTRY}:${{ github.run_number }}"
-          docker build -t $dockerImage .
+          docker build -t vipv/kuber:${{ github.run_number }} .
 
-      - name: Push Docker Image
+      - name: Push Docker image
         run: |
-          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker push "${env:DOCKERHUB_REGISTRY}:${{ github.run_number }}"
+          docker login -u vipv -p 9092897730
+          docker push vipv/kuber:${{ github.run_number }}
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f node-web-app-deployment.yaml
-          kubectl apply -f node-web-app-service.yaml
+          # Add your Kubernetes deployment and service commands here
+          # Example:
+          # kubectl apply -f node-web-app-deployment.yaml
+          # kubectl apply -f node-web-app-service.yaml
+
+  test:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Docker image
+        run: |
+          docker run -p 8000:8000 vipv/kuber:${{ github.run_number }}
 
       - name: Run Selenium Test
         run: |
-          Start-Process -NoNewWindow -FilePath "node" -ArgumentList "helloworld.js"
-          Start-Sleep -Seconds 10
-          # Install Selenium dependencies and run Selenium tests
-          # Replace with the actual commands
+          node helloworld.js &
+          # Wait for server to start
+          sleep 60
+          # Install Selenium dependencies
+          npm install selenium-webdriver chromedriver
+          # Run Selenium test
+          node selenium-test.js
+          # Kill the Express.js server process
+          pkill -f "node helloworld.js"
 
-      - name: Cleanup
+      - name: Logout from Docker
         run: docker logout
