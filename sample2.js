@@ -2,12 +2,12 @@ import { Octokit } from '@octokit/rest';
 import fetch from 'node-fetch'; // Import node-fetch
 
 const octokit = new Octokit({
-  auth: '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',
+  auth: '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',
   request: { fetch } // Pass fetch as the request implementation
 });
 
 const owner = 'SS2199';
-const repo = 'CICD';
+const repo = 'Action';
 
 async function getWorkflows() {
   try {
