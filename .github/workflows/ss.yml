@@ -1,53 +1,25 @@
-name: CI/CD Pipeline
-
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:  
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'SS2199/CICD'
+        required: true
 
 jobs:
-  build:
+  use_api:
     runs-on: ubuntu-latest
-    env:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
+    permissions:
+      issues: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Set up Git
+        run: git config --global user.email "actions@github.com" && git config --global user.name "GitHub Actions"
 
-      - name: Install Dependencies
+      - name: Use API
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm install
-
-      - name: Test
-        run: |
-          npm test
-
-      - name: Build Docker image
-        run: |
-          docker build -t vipv/kuber:${{ github.run_number }} .
-
-      - name: Push Docker image
-        run: |
-          docker login -u sivashreek -p shreemani
-          docker push sivashreek/kubn:${{ github.run_number }}
-
-      - name: Configure Kubernetes
-        run: |
-          mkdir -p ~/.kube
-          echo "$KUBECONFIG" > ~/.kube/config
-
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f node-web-app-deployment.yaml
-          kubectl apply -f node-web-app-service.yaml
-
-      - name: Clean up
-        run: |
-          docker logout
+          repository_name="${{ github.event.inputs.repository }}"
+          gh api repos/${repository_name}/issues
