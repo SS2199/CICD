@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Actions Workflow Trigger</title>
+</head>
+<body>
+    <h1>Trigger GitHub Actions Workflow</h1>
+    <button id="triggerButton">Trigger Workflow</button>
+
+    <script>
+        const githubToken = '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';
+        const repositoryOwner = 'SS2199';
+        const repositoryName = 'CICD';
+        const workflowFileName = 'nodejs-ci.yml';
+
+        const dispatchWorkflow = async () => {
+            try {
+                const response = await fetch(
+                    `https://api.github.com/repos/${repositoryOwner}/${repositoryName}/actions/workflows/${workflowFileName}/dispatches`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `token ${githubPAT}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ref: 'main', // Specify the branch or ref
+                            inputs: {
+                                // Provide any input parameters if your workflow expects them
+                                exampleParam: 'value',
+                            },
+                        }),
+                    }
+                );
+
+                if (response.status === 204) {
+                    console.log('Workflow dispatch triggered successfully.');
+                } else {
+                    console.error('Failed to trigger workflow dispatch:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error triggering workflow dispatch:', error.message);
+            }
+        };
+
+        // Add a click event listener to the button to trigger the workflow when clicked.
+        const triggerButton = document.getElementById('triggerButton');
+        triggerButton.addEventListener('click', dispatchWorkflow);
+    </script>
+</body>
+</html>
