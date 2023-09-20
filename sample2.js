@@ -1,7 +1,9 @@
 import { Octokit } from '@octokit/rest';
+import fetch from 'node-fetch'; // Import node-fetch
 
 const octokit = new Octokit({
-  auth: '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'
+  auth: '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',
+  request: { fetch } // Pass fetch as the request implementation
 });
 
 const owner = 'SS2199';
