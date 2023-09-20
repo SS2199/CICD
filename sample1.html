@@ -10,7 +10,7 @@
     <button id="triggerButton">Trigger Workflow</button>
 
     <script>
-        const githubToken = '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';
+        const githubToken = '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';
         const repositoryOwner = 'SS2199';
         const repositoryName = 'CICD';
         const workflowFileName = 'nodejs-ci.yml';
@@ -22,7 +22,7 @@
                     {
                         method: 'POST',
                         headers: {
-                            Authorization: `token ${githubPAT}`,
+                            Authorization: `token ${githubToken}`,
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
