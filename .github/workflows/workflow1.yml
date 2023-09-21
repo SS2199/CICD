@@ -24,17 +24,17 @@ jobs:
         run: |
           npm install
 
-      - name: Download Cross-platform SonarQube Scanner
-        run: |
-          curl -o sonar-scanner.zip -L https://url-to-cross-platform-sonar-scanner.zip
-          unzip sonar-scanner.zip
-
-      - name: Run SonarQube Analysis
-        run: |
-          ./sonar-scanner/bin/sonar-scanner
-
-      - name: Test with Jest
-        run: |
-          npm test
+      - name: SonarQube Analysis
+          run: |
+           curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+           echo "C:\Users\vipv\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat"
+  
+      - name: Test using Jest
+          run: npm test
+  
+        - name: Run JMeter Tests
+          uses: QAInsights/PerfAction@v3.1
+          with:
+            test-plan-path: ./CSVSample.jmx
 
 
