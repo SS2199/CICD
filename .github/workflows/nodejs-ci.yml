@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -6,20 +6,32 @@ on:
       - main
 
 jobs:
-  NodeApp:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Use the desired Node.js version
+          node-version: '16'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install
 
-      - name: Run Tests
-        run: npm test
+      - name: Build Docker image
+        run: |
+            docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
+
+      - name: Push Docker image
+        run: |
+            docker login -u sindhusambasivam -p sindhu21*
+
+      - name: Run Docker Container
+        run: |
+            docker run -d -p 8000:8000 sindhusambasivam/hello_world:${{ github.run_number }}
+
+            docker push sindhusambasivam/hello_world:${{ github.run_number }}              
