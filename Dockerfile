@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Define the command to start your application
-CMD [ "node", "app.js" ]
+CMD [ "node", "helloworld.js" ]
