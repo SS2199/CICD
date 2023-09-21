@@ -23,17 +23,23 @@ jobs:
         run: |
           npm install
 
+      - name: Install Wine (for SonarQube Scanner)
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y wine32
+
       - name: Download SonarQube Scanner
         run: |
           curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
           unzip sonar-scanner.zip
-          chmod +x sonar-scanner-5.0.1.3006-windows/bin/sonar-scanner.bat
 
-      - name: SonarQube Analysis
+      - name: Run SonarQube Analysis
         run: |
-          sonar-scanner-5.0.1.3006-windows/bin/sonar-scanner.bat
+          wine sonar-scanner-5.0.1.3006-windows/bin/sonar-scanner.bat
 
       - name: Test with Jest
         run: |
           npm test
+
 
