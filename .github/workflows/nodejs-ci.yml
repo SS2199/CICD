@@ -22,25 +22,11 @@ jobs:
         run: |
           npm install
 
-      - name: Build and Push Docker image
+      - name: Build Docker image
         run: |
-          # Build the Docker image
-          docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
-          
-          # Log in to Docker Hub or another Docker registry (replace with your registry)
-          docker login -u sindhusambasivam/hello_world -p sindhu21*
-          
-          # Push the Docker image
-          docker push sindhusambasivam/hello_world:${{ github.run_number }}
+            docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
 
-      - name: Get Docker Image Digest
-        id: get-digest
+      - name: Push Docker image
         run: |
-          # Get the image digest for the pushed image
-          IMAGE_DIGEST=$(docker inspect --format '{{index .RepoDigests 0}}' sindhusambasivam/hello_world:${{ github.run_number }})
-          echo "::set-output name=image_digest::$IMAGE_DIGEST"
-        shell: bash
-
-      - name: Display Image Digest
-        run: |
-          echo "Docker Image Digest: ${{ steps.get-digest.outputs.image_digest }}"
+            docker login -u sindhusambasivam -p sindhu21*
+            docker push sindhusambasivam/hello_world:${{ github.run_number }}              
