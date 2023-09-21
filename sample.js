@@ -1,31 +1,35 @@
-import axios from 'axios';
+import { Octokit } from '@octokit/rest';
+import fetch from 'node-fetch';
 
-const githubToken = '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';
-const repositoryOwner = 'SS2199';
-const repositoryName = 'CICD';
-const workflowFileName = 'test.yml';
+const octokit = new Octokit({
+  auth: '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',
+  request: { fetch },
+});
+
+const owner = 'SS2199';
+const repo = 'Action';
+const workflowFileName = '.github/workflows/trigger-workflow.yml'; // Name of the workflow YAML file
 
 async function triggerWorkflow() {
   try {
-    const response = await axios.post(
-        `https://api.github.com/repos/${repositoryOwner}/${repositoryName}/actions/workflows/${workflowFileName}/dispatches`,
-      {
-        ref: 'main', // Specify the branch or ref
-        inputs: {
-          // Provide any input parameters if your workflow expects them
-          exampleParam: 'value',
-        },
+    const response = await octokit.actions.createWorkflowDispatch({
+      owner,
+      repo,
+      workflow_file: workflowFileName,
+      ref: 'main', // Specify the branch or ref
+      inputs: {
+        // Provide any input parameters if your workflow expects them
+        exampleParam: 'value',
       },
-      {
-        headers: {
-          Authorization: `token ${githubToken}`,
-        },
-      }
-    );
+    });
 
-    console.log('Workflow dispatch triggered successfully:', response.data);
+    if (response.status === 204) {
+      console.log('Workflow dispatch triggered successfully.');
+    } else {
+      console.error('Failed to trigger workflow dispatch:', response.statusText);
+    }
   } catch (error) {
-    console.error('Error triggering workflow dispatch:', error);
+    console.error('Error triggering workflow dispatch:', error.message);
   }
 }
 
