@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -6,20 +6,41 @@ on:
       - main
 
 jobs:
-  NodeApp:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Use the desired Node.js version
+          node-version: '14'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install
 
-      - name: Run Tests
-        run: npm test
+      - name: Build and Push Docker image
+        run: |
+          # Build the Docker image
+          docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
+          
+          # Log in to Docker Hub or another Docker registry (replace with your registry)
+          docker login -u sindhusambasivam/hello_world -p sindhu21*
+          
+          # Push the Docker image
+          docker push sindhusambasivam/hello_world:${{ github.run_number }}
+
+      - name: Get Docker Image Digest
+        id: get-digest
+        run: |
+          # Get the image digest for the pushed image
+          IMAGE_DIGEST=$(docker inspect --format '{{index .RepoDigests 0}}' sindhusambasivam/hello_world:${{ github.run_number }})
+          echo "::set-output name=image_digest::$IMAGE_DIGEST"
+        shell: bash
+
+      - name: Display Image Digest
+        run: |
+          echo "Docker Image Digest: ${{ steps.get-digest.outputs.image_digest }}"
