@@ -1,6 +1,6 @@
 const https = require('https');
 
-const githubToken = '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'; // Replace with your GitHub Personal Access Token
+const githubToken = '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'; // Replace with your GitHub Personal Access Token
 const owner = 'SS2199';
 const repo = 'CICD';
 const branch = 'main'; // Change to your branch name
@@ -21,18 +21,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
       - name: Install Dependencies
-        run: npm install
-
-      - name: SonarQube Analysis
         run: |
-          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-          echo "C:\\Users\\vipv\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
+          npm install
+
+          - name: SonarQube Analysis
+          run: |
+            curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+            echo "C:\Users\sindhu\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat"
+        
+      - name: Test using Jest
+          run: npm test
+  
+        - name: Run JMeter Tests
+          uses: QAInsights/PerfAction@v3.1
+          with:
+            test-plan-path: ./CSVSample.jmx
 
 
 `; // Replace with the content of your updated YAML file
