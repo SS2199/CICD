@@ -1,4 +1,5 @@
 
+
 name: CI/CD Pipeline
 
 on:
@@ -23,20 +24,14 @@ jobs:
         run: |
           npm install
 
-      - name: Install Wine (for SonarQube Scanner)
+      - name: Download Cross-platform SonarQube Scanner
         run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y wine32
-
-      - name: Download SonarQube Scanner
-        run: |
-          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+          curl -o sonar-scanner.zip -L https://url-to-cross-platform-sonar-scanner.zip
           unzip sonar-scanner.zip
 
       - name: Run SonarQube Analysis
         run: |
-          wine sonar-scanner-5.0.1.3006-windows/bin/sonar-scanner.bat
+          ./sonar-scanner/bin/sonar-scanner
 
       - name: Test with Jest
         run: |
