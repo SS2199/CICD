@@ -22,17 +22,15 @@ jobs:
         run: |
           npm install
 
-          - name: SonarQube Analysis
-          run: |
-            curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-            echo "C:Userssindhusonar-scanner-5.0.1.3006-windowsinsonar-scanner.bat"
-        
+      - name: SonarQube Analysis
+        run: |
+          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
+          echo "C:\\Users\\sindhu\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
+
       - name: Test using Jest
-          run: npm test
-  
-        - name: Run JMeter Tests
-          uses: QAInsights/PerfAction@v3.1
-          with:
-            test-plan-path: ./CSVSample.jmx
+        run: npm test
 
-
+      - name: Run JMeter Tests
+        uses: QAInsights/PerfAction@v3.1
+        with:
+          test-plan-path: ./CSVSample.jmx
