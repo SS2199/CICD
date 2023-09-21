@@ -2,7 +2,7 @@ import { Octokit } from '@octokit/rest';
 import fetch from 'node-fetch'; // Import node-fetch
 
 const octokit = new Octokit({
-  auth: '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',
+  auth: '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',
   request: { fetch } // Pass fetch as the request implementation
 });
 
