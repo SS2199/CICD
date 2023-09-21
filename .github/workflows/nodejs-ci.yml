@@ -29,4 +29,9 @@ jobs:
       - name: Push Docker image
         run: |
             docker login -u sindhusambasivam -p sindhu21*
+
+      - name: Run Docker Container
+        run: |
+            docker run -d -p 8000:8000 sindhusambasivam/hello_world:${{ github.run_number }}
+
             docker push sindhusambasivam/hello_world:${{ github.run_number }}              
