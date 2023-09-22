@@ -1,66 +1,34 @@
 name: CI/CD Pipeline
 
 on:
-  #push:
-   # branches:
-    #  - main
-  workflow_dispatch:  
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-      DOCKERHUB_REGISTRY: sindhusambasivam/hello_world
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Use the desired Node.js version
+          node-version: '16'
 
       - name: Install Dependencies
-        run: npm install
-
-
-      - name: Set up SonarQube Scanner
         run: |
-         curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip
-         echo "C:\\Users\\vipv\\sonar-scanner-5.0.1.3006-windows\\bin\\sonar-scanner.bat"
-
-         
-      - name: Test using Jest
-        run: npm test
-
+          npm install
       - name: Build Docker image
         run: |
-            docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
-
+            docker build -t vipv/kuber:${{ github.run_number }} .
       - name: Push Docker image
         run: |
-            docker login -u sindhusambasivam -p sindhu21*
-            docker push sindhusambasivam/hello_world:${{ github.run_number }}
-
-      - name: Deploy to Kubernetes
+            docker login -u vipv -p 9092897730
+            docker push vipv/kuber:${{ github.run_number }}
+      - name: Pull Docker image
         run: |
-          kubectl apply -f node-web-app-deployment.yaml
-          kubectl apply -f node-web-app-service.yaml
-
-      - name: Run Selenium Test
+            docker pull vipv/kuber:${{ github.run_number }}  
+      - name: Run Docker Container
         run: |
-          node helloworld.js &
-          # Wait for server to start
-          sleep 60
-          # Install Selenium dependencies
-          npm install selenium-webdriver chromedriver
-          # Run Selenium test
-          node selenium-test.js
-          # Kill the Express.js server process
-          pkill -f "node helloworld.js"
-
-      - name: Logout from Docker
-        run: docker logout
+            docker run -p 5001:5000 vipv/kuber:${{ github.run_number }}
