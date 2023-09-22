@@ -7,7 +7,7 @@ const server = app.listen(port, () => {
 });
 
 app.get("/", (req, res) => {
-  console.log("Hello world");
+  console.log("<h1>Hello world!</h1>");
   res.send("Hello world");
 });
 
