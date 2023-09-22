@@ -35,7 +35,7 @@ jobs:
         with:
           test-plan-path: ./CSVSample.jmx
 
-       - name: Build Docker image
+      - name: Build Docker image
         run: |
           docker build -t vipv/kuber1:${{ github.run_number }} .
 
