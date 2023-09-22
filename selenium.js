@@ -5,6 +5,7 @@ const chromedriver = require('chromedriver');
 // Configure Chrome options if needed
 const options = new chrome.Options();
 
+
 async function runSeleniumTest() {
   const driver = new Builder()
     .forBrowser('chrome')
