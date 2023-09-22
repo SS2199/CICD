@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Docker Test
 
 on:
   push:
@@ -24,24 +24,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-            docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
+          docker build -t sindhusambasivam/hello_world:${{ github.run_number }} .
 
       - name: Push Docker image
         run: |
-            docker login -u sindhusambasivam -p sindhu21*
-            docker push sindhusambasivam/hello_world:${{ github.run_number }}   
+          docker login -u sindhusambasivam -p sindhu21*
+          docker push sindhusambasivam/hello_world:${{ github.run_number }}
 
       - name: Run Docker Container
         run: |
-            docker run -p 8000:8000 sindhusambasivam/hello_world:${{ github.run_number }}
-
-                       
-
-      #- name: Run Selenium test
-       # run: node selenium.cjs
-
-
-
-
-
-
+          docker run -d -p 8000:8000 sindhusambasivam/hello_world:${{ github.run_number }}
