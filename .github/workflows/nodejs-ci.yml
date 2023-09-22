@@ -35,3 +35,12 @@ jobs:
             docker run -d -p 8000:8000 sindhusambasivam/hello_world:${{ github.run_number }}
 
             docker push sindhusambasivam/hello_world:${{ github.run_number }}              
+
+      - name: Run Selenium test
+        run: node selenium.js
+
+
+
+
+
+
