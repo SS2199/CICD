@@ -45,19 +45,16 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t vipv/kuber1:${{ github.run_number }} .
+          docker build -t vipv/kuber1:\${{ github.run_number }} .
 
       - name: Push Docker image
         run: |
           docker login -u vipv -p 9092897730
-          docker push vipv/kuber1:${{ github.run_number }}
+          docker push vipv/kuber1:\${{ github.run_number }}
 
       - name: Run Docker Container
         run: |
-          docker run -d -p 8000:8000 vipv/kuber1:${{ github.run_number }}
-
-
-
+          docker run -d -p 8000:8000 vipv/kuber1:\${{ github.run_number }}
 `; // Replace with the content of your updated YAML file
 
 // Get the current SHA of the file from GitHub
@@ -113,7 +110,7 @@ async function createOrUpdateFile() {
     const encodedContent = Buffer.from(content).toString('base64');
 
     const data = {
-      message: 'Update CI/CD YAML file',
+      message: 'Update CI/CD YAML file', // Change this message for each commit
       content: encodedContent,
       branch: branch,
       sha: currentSHA, // Include the current SHA
