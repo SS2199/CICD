@@ -1,6 +1,6 @@
 const https = require('https');
 
-const githubToken = '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'; // Replace with your GitHub Personal Access Token
+const githubToken = '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'; // Replace with your GitHub Personal Access Token
 const owner = 'SS2199';
 const repo = 'CICD';
 const branch = 'main'; // Change to your branch name
